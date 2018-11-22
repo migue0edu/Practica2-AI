@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="../css/materialize.min.css"  media="screen,projection"/>
+    <title>Practica 1</title>
+</head>
+<body>
+
+    <div class="row">
+
+        <div class="col s6">
+            <div class="valign-wrapper" style="height: 75px;">
+                <h5>Start position:</h5>
+            </div>
+        </div>
+        <div class="input-field col s2">
+            <input placeholder="0" id="initX" type="number" class="validate">
+        </div>
+        <div class="input-field col s2">
+            <select id="initY" class="validate"></select>
+        </div>
+        <div class="col s2"></div>
+    </div>
+
+    <div class="row">
+        <div class="col s6 m6">
+            <div class="valign-wrapper" style="height: 75px;">
+                <h5>End position:</h5>
+            </div>
+        </div>
+        <div class="input-field col s2">
+            <input placeholder="0" id="finalX" type="number" class="validate">
+        </div>
+        <div class="input-field col s2">
+            <select id="finalY" class="validate"></select>
+        </div>
+        <div class="col s2">
+            <div class="valign-wrapper" style="height: 75px;">
+                <button class="waves-effect waves-light btn-small" onclick="checarPosicionInicial()">
+                    <i class="material-icons">check</i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="../js/materialize.min.js"></script>
+    <script type="text/javascript" src="../dialogs/posInicial.js"></script>
+</body>
+</html>

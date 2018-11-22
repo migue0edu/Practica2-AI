@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <meta charset="utf-8"/>
+        <!--Dibujado del mapa-->
+        <script src="maze/draw.js"></script>
+    </head>
+    <body onload="draw();">
+        <div class="row" style="margin-bottom: 0px;">
+            <!-------------Columna para el mapa--------------->
+            <div class="col s12 m8 l8">
+                <canvas id="canvas" style="border: 1px solid black; padding: 5px; position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                <!--Layer para la niebla-->
+                <canvas id="layer1" style="position: absolute; left: 40px; top: 25px; z-index: 1;"></canvas>
+                <!--Layer para el jugador-->
+                <canvas id="layer2" style="position: absolute; left: 40px; top: 25px; z-index: 2;"></canvas>
+                <!--Layer para los datos del mapa-->
+                <canvas id="layer3" style="position: absolute; left: 40px; top: 25px; z-index: 2;"></canvas>
+            </div>
+            <!-------------Columna para la interfaz--------------->
+            <div class="col s12 m4 l4">
+                <div class="row">
+                    <div class="col s12 m12 l12" style="background: #82B1FF;">
+                        <h5 align="center" >Coordinates</h5>
+                    </div>
+
+                    <div class="col s12 m12 l12" style="background: #c2ddff;">
+                        <div class="input-field col s4">
+                            <input placeholder="0" id="cordX" type="number" class="validate">
+                        </div>
+                        <div class="input-field col s4 ">
+                            <select id="cordY" class="validate"></select>
+                        </div>
+                        <div class="col s4 ">
+                            <div class="valign-wrapper" style="height: 75px;">
+                                <button class="waves-effect waves-light btn-small" onclick="obtenerTipoTerreno()">
+                                    <i class="material-icons">search</i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m12 l12" align="center">
+                                Terrain:
+                                <span id="tipoTerreno"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m12 l12" style="background: #36ff8b">
+                        <h5 align="center">Change Terrain</h5>
+                    </div>
+
+                    <div class="col s12 m12 l12 " style="background: #93ffbe">
+                        <div class="input-field col s8">
+                            <select id="newTerrain" class="validate"></select>
+                            <label>TO:</label>
+                        </div>
+                        <div class="col s4">
+                            <div class="valign-wrapper" style="height: 75px;">
+                                <button class="waves-effect waves-light btn-small" onclick="actualizarTipoTerreno()">
+                                    <i class="material-icons">brush</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m12 l12" style="background: #f7ff9c">
+                        <span style="font-weight: bold; display: inline-block">Show map info:</span>
+                    </div>
+
+                    <div class="col s12 m12 l12" style="background: #fffdbf; padding: 5px;">
+                        <div class="switch">
+                            <label style="color: black; font-weight: bold;">
+                                No
+                                <input type="checkbox" id="mapInfo" onclick="mostrarDatos()"> <!--datamap.js-->
+                                <span class="lever"></span>
+                                Yes
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!----------------Termina columna interfaz-------------->
+        </div>
+
+        <div class="row" style="margin-bottom: 0px;">
+            <div class="col s12 m7 l7" style="background: #CEC9CF">
+                <div class="row" style="background: #9B969C;">
+                    <span align="left" style="font-weight: bold;">Set priority:</span>
+                </div>
+                <div class="row"></div>
+                <div class="row">
+                    <div class="col s1 m1 l1"></div>
+                    <button id="UpButton" class="waves-effect waves-light btn-small green accent-1 black-text"
+                            onclick="actualizarPrioridad('Up')">
+                        <i class="material-icons black-text left">arrow_upward</i>
+                    </button>
+                    <button id="DownButton" class="waves-effect waves-light btn-small blue lighten-3 black-text"
+                            onclick="actualizarPrioridad('Down')">
+                        <i class="material-icons black-text left">arrow_downward</i>
+                    </button>
+                    <button id="LeftButton" class="waves-effect waves-light btn-small red lighten-4 black-text"
+                            onclick="actualizarPrioridad('Left')">
+                        <i class="material-icons black-text left">arrow_back</i>
+                    </button>
+                    <button id="RightButton" class="waves-effect waves-light btn-small red accent-1 black-text"
+                            onclick="actualizarPrioridad('Right')">
+                        <i class="material-icons black-text left">arrow_forward</i>
+                    </button>
+                    <button id="ClearButton" class="waves-effect waves-light btn-small  brown lighten-2"
+                            onclick="borrarPrioridad()">Clear
+                        <i class="material-icons black-text left">delete</i>
+                    </button>
+                </div>
+                <div class="row" style="margin-bottom: 27px;"></div>
+            </div>
+            <div class="col s12 m5 l5" style="background: #86BCCE; ">
+                <div class="row" style="background: #78A8B7; margin-bottom: 0px;">
+                    <span style="font-weight: bold; display: inline-block"> Solve using:</span>
+                </div>
+                <div class="row" style="margin-bottom: 0px;">
+                    <div class="col s12 m5 l5">
+                        <select id="method" class="validate" onchange="activarParametros()"></select>
+                    </div>
+                    <div class="col s12 m3 l3" >
+                        <div class="valign-wrapper" style="height: 50px;">
+                            <button class="waves-effect waves-light btn-small tooltipped"
+                                    data-position="top" data-tooltip="Step by Step"
+                                    id="stepMode"
+                                    onclick="resolver('Step')">
+                                <i class="material-icons">play_arrow</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col s12 m3 l3">
+                        <div class="valign-wrapper" style="height: 50px;">
+                            <button class="waves-effect waves-light btn-small tooltipped"
+                                    data-position="top" data-tooltip="Node to Node"
+
+                                    id="nodeMode"
+                                    onclick="resolver('Node')">
+                                <i class="material-icons">skip_next</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col s0 m1 l1"></div>
+                </div>
+                <div class="row" style="margin-top: 0px; margin-bottom: 40px;">
+                    <div class="input-field col s4" style="height: 0px;">
+                        <input placeholder="0" id="Increment" type="number">
+                        <label for="Increment">Increment:</label>
+                    </div>
+                    <div class="input-field col s4" style="height: 0px;">
+                        <input placeholder="0" id="InitialDepth" type="number" >
+                        <label for="InitialDepth">Initial Depth:</label>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none; position: absolute;">
+            <img id="source">
+        </div>
+
+        <!--JS requerido por Materializa-->
+        <script type="text/javascript" src="js/materialize.min.js"></script>
+        <!--Funciones para el arbol-->
+        <script type="text/javascript" src="tree/tree.js"></script>
+        <!--Configuracion de los elementos de la interfaz-->
+        <script type="text/javascript" src="maze/configUI.js"></script>
+        <!--COnfiguracion inicial del enmascaramiento-->
+        <script type="text/javascript" src="misc/mask.js"></script>
+        <!--Definicion de las funciones de los botones-->
+        <script type="text/javascript" src="maze/actions.js"></script>
+        <!--Funciones e inicializacion de los datos del mapa -->
+        <script type="text/javascript" src="misc/datamap.js"></script>
+        <!--Funciones relacionadas con el moviemiento del jugador-->
+        <script type="text/javascript" src="maze/movements.js"></script>
+        <!--Configuracion de la parte inferior de la interfaz-->
+        <script type="text/javascript" src="misc/botomPanel.js"></script>
+    </body>
+</html>
