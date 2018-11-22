@@ -21,6 +21,7 @@ function quitarNiebla(x, y){
 }
 
 function actualizarPosicion(dir){
+    let mode = require('electron').remote.getGlobal('mode').mode;
     let ctx2 = layer2.getContext('2d');
     switch (dir){
         case 'R':
@@ -70,6 +71,14 @@ function actualizarPosicion(dir){
     }
     esDescicion(posX, posY);
     quitarNiebla(posX, posY);
-    actualizarJugador(posX, posY);
+    if( mode = 'Step'){
+        actualizarJugador(posX, posY);
+    }
+    else{
+        if(datamap[posY][posX].includes('v')){
+            actualizarJugador(posX, posY);
+        }
+    }
+
     return true;
 }

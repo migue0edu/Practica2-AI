@@ -150,14 +150,17 @@ let resolver = (modo) => {
         }
     }
 
+    require('electron').remote.getGlobal('mode').mode = modo;
+
     if(modo === 'Step'){
         active = true;
         nodeMode.disabled = !nodeMode.disabled;
         solving = setInterval(solveMaze,350, modo, method.value);
     }
     if(modo === 'Node'){
+        active = true;
         stepMode.disabled = !stepMode.disabled;
-        solving = setInterval(solveMaze, 350, modo, method.value);
+        solving = setInterval(solveMaze, 350, 'Step', method.value);
     }
     active = true;
 };
@@ -358,6 +361,7 @@ let solveMaze = (mode, method) => {
                             actNode = lastSet[lastIndex];
                             result = solutionTree.findNode(actNode);
                             limpiardesicion(posX,posY);
+                            limpiarJugador(posX, posY);
                             lastNode = solutionTree.getCoordsofNode(result.node.father);
                             posY = Number.parseInt(lastSet[lastIndex].charAt(0));
                             posX = Number.parseInt(chars.indexOf(lastSet[lastIndex].charAt(1)));
@@ -372,6 +376,7 @@ let solveMaze = (mode, method) => {
                     newSet.splice(0, newSet.length);
                     lastIndex = 0;
                     limpiardesicion(posX,posY);
+                    limpiarJugador(posX, posY);
                     posY = Number.parseInt(lastSet[0].charAt(0));
                     posX = Number.parseInt(chars.indexOf(lastSet[0].charAt(1)));
                     nuevaPosicionActual(posX, posY);

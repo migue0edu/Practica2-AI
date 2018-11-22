@@ -12,6 +12,7 @@ global.tipo = 'maze';
 global.initialPos = {x: 0, y:0};
 global.endPos = {x:0, y:0};
 global.solutionTree = {tree: ''};
+global.mode = {mode: ''};
 
 let win;
 let child;
@@ -40,6 +41,8 @@ const template = [
             //console.log(solutionTree);
             child2 = new BrowserWindow({ width: 500, height: 800, parent: win, modal: true, show: false});
             child2.loadFile('dialogs/treegraphic.html');
+            child2.setAutoHideMenuBar(true);
+            child2.setMenuBarVisibility(false);
             child2.show();
         }
     },
